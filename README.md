@@ -22,12 +22,14 @@ Menu
 14. Deque
 15. Linked List
 16. Priority List
-17. String
-18. Sorting
-19. Bubble Sort
-20. Bucket Sort
-21. Merge Sort
-22. Heap Sort
-23. Topological Sort
-24. Randomization
-25. & Other Stories
+17. Hash Table 
+18. String
+19. Sorting
+    -  Bubble Sort
+    - Bucket Sort
+    - Merge Sort
+    - Heap Sort
+    - Topological Sort
+20. Math
+21. Randomization
+22. & Other Stories
