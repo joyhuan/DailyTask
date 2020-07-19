@@ -1,15 +1,79 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Games {
-    /**
-     * Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate
-     * a queen and an empty space respectively.
-     * @param n
-     * @return all distinct solutions to the n-queens puzzle.
-     */
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+        HashMap<Integer, ArrayList<Integer>> priorityLevel = new HashMap<>(); // level to numbers on this level
+        ArrayList<Integer> forZero = new ArrayList<Integer>(0);
+        forZero.add(0);
+        priorityLevel.put(0, forZero);
+        HashMap<Integer, Integer> nodeToLevel = new HashMap<>();
+        nodeToLevel.put(0,0);
+        int maxPriority = 0;
+        HashMap<Integer, ArrayList<Integer>> treeStruct = new HashMap<>();
+        treeStruct.put(0, new ArrayList<Integer>());
+        for(int[] pair: edges){
+            if(treeStruct.containsKey(pair[0])){
+                ArrayList<Integer> previous = treeStruct.get(pair[0]);
+                previous.add(pair[1]);
+                treeStruct.put(pair[0], previous);
+            }else if(treeStruct.containsKey(pair[1])){
+                ArrayList<Integer> previous = treeStruct.get(pair[1]);
+                previous.add(pair[0]);
+                treeStruct.put(pair[1], previous);
+
+//                ArrayList<Integer> place = new ArrayList<Integer>();
+//                place.add(pair[1]);
+//                treeStruct.put(pair[0], place);
+            }else{
+
+            }
+            if(nodeToLevel.containsKey(pair[0])){
+                nodeToLevel.put(pair[1], 1+nodeToLevel.get(pair[0]));
+
+                ArrayList<Integer> previous = priorityLevel.getOrDefault(1+nodeToLevel.get(pair[0]), new ArrayList<Integer>());
+                previous.add(pair[1]);
+                priorityLevel.put(1+nodeToLevel.get(pair[0]), previous);
+                maxPriority = Math.max(maxPriority, 1+nodeToLevel.get(pair[0]));
+                System.out.println("pair 0 and pair 1 " + pair[0] + " " + pair[1]);
+                System.out.println("maxPriority " + maxPriority);
+                System.out.println(priorityLevel.get(maxPriority));
+            }
+        }
+        System.out.println(maxPriority);
+        HashMap<Integer, HashMap<String, Integer>> map = new HashMap<>();
+        int[] finalAnswer = new int[labels.length()];
+        while(maxPriority >=0){
+            System.out.println("maxPriority current is "+maxPriority);
+            ArrayList<Integer> leaves = priorityLevel.get(maxPriority);
+            System.out.println(leaves);
+            for(int i: leaves){
+                HashMap<String, Integer> toAdd = new HashMap<>();
+                if(maxPriority == 0) System.out.println("i is "+i);
+                toAdd.put(labels.substring(i, i+1), 1);
+                if(treeStruct.get(i)!= null){
+                    for(int j: treeStruct.get(i)){
+                        if(maxPriority == 0) System.out.println("j is "+j);
+                        HashMap<String, Integer> mapOfJ = map.get(j);
+                        for(String k: mapOfJ.keySet()){
+                            toAdd.put(k, toAdd.getOrDefault(k, 0) +mapOfJ.get(k));
+                        }
+                    }
+                }
+                map.put(i, toAdd);
+                finalAnswer[i] = map.get(i).get(labels.substring(i,i+1));
+            }
+            maxPriority -= 1;
+        }
+
+        return finalAnswer;
+    }
+
+        /**
+         * Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate
+         * a queen and an empty space respectively.
+         * @param n
+         * @return all distinct solutions to the n-queens puzzle.
+         */
     private List<List<String>> solveNQueens(int n) {
         char[][] board = new char[n][n];
         for(int i = 0; i<n; i++)
@@ -241,16 +305,8 @@ public class Games {
     public static void main(String[] args) {
         int[][] initial = { {1, 8, 2}, {0, 4, 3}, {7, 6, 5} };
         int[][] goal    = { {1, 2, 3}, {4, 5, 6}, {7, 8, 0} };
-
-        // White tile coordinate
-        int x = 1, y = 0;
-        System.out.println(x);
-//            Puzzle puzzle = new Puzzle();
-//            if (puzzle.isSolvable(initial)) {
-//                puzzle.solve(initial, goal, x, y);
-//            }
-//            else {
-//                System.out.println("The given initial is impossible to solve");
-//            }
+        Games game = new Games();
+        int[] result = game.countSubTrees(8, new int[][]{{0,1},{1,2},{2,3},{1,4},{2,5},{2,6},{4,7}},"leetcode");
+        System.out.println(Arrays.toString(result));
     }
 }
