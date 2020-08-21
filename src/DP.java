@@ -2,6 +2,90 @@ import java.util.HashMap;
 
 public class DP {
     /**
+     * 10. Regular Expression Matching
+     * '.' Matches any single character.
+     * '*' Matches zero or more of the preceding element.
+     * 悔不当初 道行未满 仍需修行
+     * @param s
+     * @param p
+     * @return Whether regular expression p matches with string s
+     */
+    public boolean isMatch(String s, String p) {
+
+        if (s == null || p == null) {
+            return false;
+        }
+        boolean[][] dp = new boolean[s.length()+1][p.length()+1];
+        dp[0][0] = true;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '*' && dp[0][i-1]) {
+                dp[0][i+1] = true;
+            }
+        }
+        for (int i = 0 ; i < s.length(); i++) {
+            for (int j = 0; j < p.length(); j++) {
+                if (p.charAt(j) == '.') {
+                    dp[i+1][j+1] = dp[i][j];
+                }
+                if (p.charAt(j) == s.charAt(i)) {
+                    dp[i+1][j+1] = dp[i][j];
+                }
+                if (p.charAt(j) == '*') {
+                    if (p.charAt(j-1) != s.charAt(i) && p.charAt(j-1) != '.') {
+                        dp[i+1][j+1] = dp[i+1][j-1];
+                    } else {
+                        dp[i+1][j+1] = (dp[i+1][j] || dp[i][j+1] || dp[i+1][j-1]);
+                    }
+                }
+            }
+        }
+        return dp[s.length()][p.length()];
+    }
+//    public boolean isMatch(String s, String p) {
+//        boolean[][] DP = new boolean[s.length()][p.length()];
+//        for(int i =0; i < s.length(); i++){
+//            char sChar = s.charAt(i);
+//            for(int j = 0; j < p.length(); j++){
+//                char pChar = p.charAt(j);
+//                if(pChar == '.') DP[i][j] = (i==0 && (j==0 || DP[i][j-1])) || (j != 0 && DP[i-1][j-1]);
+//                else if(pChar == '*') DP[i][j] = DP[i][j-1] || (j > 1 && DP[i][j-2]) || (i > 0 && DP[i-1][j-1] && s.charAt(i) == p.charAt(j-1));
+//                else if(pChar == sChar){
+//                    if((i == 0 && j == 0) || (i > 0 && j > 0 && DP[i-1][j-1]))
+//                        DP[i][j] = true;
+//                    if(i == 0){
+//                        for(int k = j-1; j >= 0; j-=2){
+//                            if(p.charAt(k) != '*'){
+//                                break;
+//                            }
+//                        }
+//                        DP[i][j] = true;
+//                    }
+//                }else{ // pChar != '.' && pChar != '*' && pChar != sChar
+//                    DP[i][j] = false;
+//                }
+//            }
+//        }
+//        return DP[s.length()-1][p.length()-1];
+//    }
+////        if(i == s.length() && j < p.length()){
+////            while(j < p.length()) {
+////                if (p.charAt(j) != '*') return false;
+////                j++;
+////            }
+////            return true;
+////        }
+////        if(i < s.length() && j == p.length()){
+////            char pLastChar = p.charAt(j-1);
+////            if(pLastChar != '*') return false;
+////            while(i < s.length()){
+////                if(s.charAt(i) != pLastChar) return false;
+////                i++;
+////            }
+////            return true;
+////        }
+
+
+    /**
      * 978. Longest Turbulent Subarray
      *   A subarray A[i], A[i+1], ..., A[j] of A is said to be turbulent if and only if:
      *
