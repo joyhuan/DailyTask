@@ -2,6 +2,17 @@ import java.util.HashMap;
 
 public class DP {
     /**
+     * 200. Number of Islands
+     * @param grid
+     * @return # of Islands
+     */
+    public int numIslands(char[][] grid) {
+        int num = 0;
+
+        return num;
+    }
+
+    /**
      * 10. Regular Expression Matching
      * '.' Matches any single character.
      * '*' Matches zero or more of the preceding element.
