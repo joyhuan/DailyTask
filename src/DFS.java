@@ -2,6 +2,62 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DFS {
+    /**
+     * 200. Number of Islands
+     * @param grid
+     * @return # of Islands
+     */
+    public int numIslands(char[][] grid) {
+        if(grid == null) return 0;
+        int numRows = grid.length;
+        if(numRows == 0) return 0;
+        int numCols = grid[0].length;
+        if(numCols == 0) return 0;
+        int numOfIslands = 0;
+        for(int i = 0; i < numRows; i++){
+            for(int j = 0; j < numCols; j++){
+                if(grid[i][j] == '1'){
+                    noteVisited(grid, i, j);
+                    numOfIslands ++;
+                }
+            }
+        }
+        normalizeGrid(grid);
+        return numOfIslands;
+    }
+
+    private void noteVisited(char[][] grid, int i, int j){
+        int numRows = grid.length;
+        int numCols = grid[0].length;
+        grid[i][j] = '2';
+        int[][] dirs = {{-1,0}, {0, 1}, {1,0}, {0, -1}};
+        for(int[] dir: dirs){
+            int nextI = i + dir[0];
+            int nextJ = j + dir[1];
+
+            if( !outOfBound(grid, nextI, nextJ) && grid[nextI][nextJ] == '1'){
+                noteVisited(grid, nextI, nextJ);
+            }
+        }
+    }
+
+    private boolean outOfBound(char[][] grid, int i, int j){
+        int numRows = grid.length;
+        int numCols = grid[0].length;
+        return i < 0 || i >= numRows || j < 0 || j >= numCols;
+    }
+
+    private void normalizeGrid(char[][] grid){
+        int numRows = grid.length;
+        int numCols = grid[0].length;
+        for(int i = 0; i < numRows; i++){
+            for(int j = 0; j < numCols; j++){
+                if(grid[i][j] == '2')
+                    grid[i][j] = '1';
+            }
+        }
+    }
+
     public class TreeNode {
         int val;
         TreeNode left;

@@ -2,19 +2,6 @@ import java.util.HashMap;
 
 public class DP {
     /**
-     * 200. Number of Islands
-     * @param grid
-     * @return # of Islands
-     */
-    public int numIslands(char[][] grid) {
-        int num = 0;
-
-        return num;
-    }
-
-
-
-    /**
      * 97. Interleaving String
      * 肯定得DP 不能DFS啊 之前还是直觉不够灵敏
      * @param s1
@@ -41,7 +28,7 @@ public class DP {
             }
         return table[s1.length()][s2.length()];
     }
-    
+
     /**
      * 10. Regular Expression Matching
      * '.' Matches any single character.
